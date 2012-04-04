@@ -1,4 +1,8 @@
 Inventnet::Application.routes.draw do
+  resources :ideas
+
+  resources :topics
+
   devise_for :users
 
   root to: "home#index"
