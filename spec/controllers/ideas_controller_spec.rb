@@ -26,18 +26,21 @@ describe IdeasController do
   def valid_attributes
     {}
   end
-  
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # IdeasController. Be sure to keep this updated too.
-  def valid_session
-    {}
+
+  before(:each) do
+    @user = FactoryGirl.create(:user)
+    @user.confirm!
+    sign_in @user
+  end
+
+  after(:each) do
+    sign_out @user
   end
 
   describe "GET index" do
     it "assigns all ideas as @ideas" do
       idea = Idea.create! valid_attributes
-      get :index, {}, valid_session
+      get :index, {}
       assigns(:ideas).should eq([idea])
     end
   end
@@ -45,14 +48,14 @@ describe IdeasController do
   describe "GET show" do
     it "assigns the requested idea as @idea" do
       idea = Idea.create! valid_attributes
-      get :show, {:id => idea.to_param}, valid_session
+      get :show, {:id => idea.to_param}
       assigns(:idea).should eq(idea)
     end
   end
 
   describe "GET new" do
     it "assigns a new idea as @idea" do
-      get :new, {}, valid_session
+      get :new, {}
       assigns(:idea).should be_a_new(Idea)
     end
   end
@@ -60,7 +63,7 @@ describe IdeasController do
   describe "GET edit" do
     it "assigns the requested idea as @idea" do
       idea = Idea.create! valid_attributes
-      get :edit, {:id => idea.to_param}, valid_session
+      get :edit, {:id => idea.to_param}
       assigns(:idea).should eq(idea)
     end
   end
@@ -69,18 +72,18 @@ describe IdeasController do
     describe "with valid params" do
       it "creates a new Idea" do
         expect {
-          post :create, {:idea => valid_attributes}, valid_session
+          post :create, {:idea => valid_attributes}
         }.to change(Idea, :count).by(1)
       end
 
       it "assigns a newly created idea as @idea" do
-        post :create, {:idea => valid_attributes}, valid_session
+        post :create, {:idea => valid_attributes}
         assigns(:idea).should be_a(Idea)
         assigns(:idea).should be_persisted
       end
 
       it "redirects to the created idea" do
-        post :create, {:idea => valid_attributes}, valid_session
+        post :create, {:idea => valid_attributes}
         response.should redirect_to(Idea.last)
       end
     end
@@ -89,14 +92,14 @@ describe IdeasController do
       it "assigns a newly created but unsaved idea as @idea" do
         # Trigger the behavior that occurs when invalid params are submitted
         Idea.any_instance.stub(:save).and_return(false)
-        post :create, {:idea => {}}, valid_session
+        post :create, {:idea => {}}
         assigns(:idea).should be_a_new(Idea)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Idea.any_instance.stub(:save).and_return(false)
-        post :create, {:idea => {}}, valid_session
+        post :create, {:idea => {}}
         response.should render_template("new")
       end
     end
@@ -111,18 +114,18 @@ describe IdeasController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         Idea.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, {:id => idea.to_param, :idea => {'these' => 'params'}}, valid_session
+        put :update, {:id => idea.to_param, :idea => {'these' => 'params'}}
       end
 
       it "assigns the requested idea as @idea" do
         idea = Idea.create! valid_attributes
-        put :update, {:id => idea.to_param, :idea => valid_attributes}, valid_session
+        put :update, {:id => idea.to_param, :idea => valid_attributes}
         assigns(:idea).should eq(idea)
       end
 
       it "redirects to the idea" do
         idea = Idea.create! valid_attributes
-        put :update, {:id => idea.to_param, :idea => valid_attributes}, valid_session
+        put :update, {:id => idea.to_param, :idea => valid_attributes}
         response.should redirect_to(idea)
       end
     end
@@ -132,7 +135,7 @@ describe IdeasController do
         idea = Idea.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Idea.any_instance.stub(:save).and_return(false)
-        put :update, {:id => idea.to_param, :idea => {}}, valid_session
+        put :update, {:id => idea.to_param, :idea => {}}
         assigns(:idea).should eq(idea)
       end
 
@@ -140,7 +143,7 @@ describe IdeasController do
         idea = Idea.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Idea.any_instance.stub(:save).and_return(false)
-        put :update, {:id => idea.to_param, :idea => {}}, valid_session
+        put :update, {:id => idea.to_param, :idea => {}}
         response.should render_template("edit")
       end
     end
@@ -150,13 +153,13 @@ describe IdeasController do
     it "destroys the requested idea" do
       idea = Idea.create! valid_attributes
       expect {
-        delete :destroy, {:id => idea.to_param}, valid_session
+        delete :destroy, {:id => idea.to_param}
       }.to change(Idea, :count).by(-1)
     end
 
     it "redirects to the ideas list" do
       idea = Idea.create! valid_attributes
-      delete :destroy, {:id => idea.to_param}, valid_session
+      delete :destroy, {:id => idea.to_param}
       response.should redirect_to(ideas_url)
     end
   end
