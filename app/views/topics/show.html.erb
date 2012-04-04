@@ -1,20 +1,22 @@
-<p id="notice"><%= notice %></p>
+<h1>/Topic</h1>
 
 <p>
-  <b>Title:</b>
+  <b>Title</b><br>
   <%= @topic.title %>
 </p>
 
 <p>
-  <b>Abstract:</b>
+  <b>Abstract</b><br>
   <%= @topic.abstract %>
 </p>
 
 <p>
-  <b>Owner:</b>
-  <%= @topic.owner %>
+  <b>Owner</b><br>
+  <%= @topic.owner_id %>
 </p>
 
-
-<%= link_to 'Edit', edit_topic_path(@topic) %> |
-<%= link_to 'Back', topics_path %>
+<div class="form-actions">
+  <%= link_to 'Back', topics_path, :class => 'btn'  %>
+  <%= link_to 'Edit', edit_topic_path(@topic), :class => 'btn' %>
+  <%= link_to 'Delete', topic_path(@topic), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+</div>

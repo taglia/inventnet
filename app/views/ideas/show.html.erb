@@ -1,20 +1,22 @@
-<p id="notice"><%= notice %></p>
+<h1>/Idea</h1>
 
 <p>
-  <b>Title:</b>
+  <b>Title</b><br>
   <%= @idea.title %>
 </p>
 
 <p>
-  <b>Content:</b>
+  <b>Content</b><br>
   <%= @idea.content %>
 </p>
 
 <p>
-  <b>Topic:</b>
-  <%= @idea.topic %>
+  <b>Topic</b><br>
+  <%= @idea.topic_id %>
 </p>
 
-
-<%= link_to 'Edit', edit_idea_path(@idea) %> |
-<%= link_to 'Back', ideas_path %>
+<div class="form-actions">
+  <%= link_to 'Back', ideas_path, :class => 'btn'  %>
+  <%= link_to 'Edit', edit_idea_path(@idea), :class => 'btn' %>
+  <%= link_to 'Delete', idea_path(@idea), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+</div>
