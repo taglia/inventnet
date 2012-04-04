@@ -16,7 +16,6 @@ describe "ideas/edit" do
     assert_select "form", :action => ideas_path(@idea), :method => "post" do
       assert_select "input#idea_title", :name => "idea[title]"
       assert_select "textarea#idea_content", :name => "idea[content]"
-      assert_select "input#idea_topic", :name => "idea[topic]"
     end
   end
 end

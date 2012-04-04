@@ -16,7 +16,6 @@ describe "topics/edit" do
     assert_select "form", :action => topics_path(@topic), :method => "post" do
       assert_select "input#topic_title", :name => "topic[title]"
       assert_select "textarea#topic_abstract", :name => "topic[abstract]"
-      assert_select "input#topic_owner", :name => "topic[owner]"
     end
   end
 end
