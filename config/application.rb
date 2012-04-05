@@ -56,7 +56,5 @@ module Inventnet
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
-    # Enforce use of SSL
-    config.middleware.use Rack::SslEnforcer
   end
 end

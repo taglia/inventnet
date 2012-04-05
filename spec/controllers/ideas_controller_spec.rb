@@ -20,17 +20,12 @@ require 'spec_helper'
 
 describe IdeasController do
 
-  # This should return the minimal set of attributes required to create a valid
-  # Idea. As you add validations to Idea, be sure to
-  # update the return value of this method accordingly.
-  def valid_attributes
-    {}
-  end
-
   before(:each) do
     @user = FactoryGirl.create(:user)
     @user.confirm!
     sign_in @user
+
+    @topic = create(:topic, owner: @user)
   end
 
   after(:each) do
@@ -39,7 +34,7 @@ describe IdeasController do
 
   describe "GET index" do
     it "assigns all ideas as @ideas" do
-      idea = Idea.create! valid_attributes
+      idea = create(:idea, user: @user, topic: @topic)
       get :index, {}
       assigns(:ideas).should eq([idea])
     end
@@ -47,7 +42,7 @@ describe IdeasController do
 
   describe "GET show" do
     it "assigns the requested idea as @idea" do
-      idea = Idea.create! valid_attributes
+      idea = create(:idea, user: @user, topic: @topic)
       get :show, {:id => idea.to_param}
       assigns(:idea).should eq(idea)
     end
@@ -62,7 +57,7 @@ describe IdeasController do
 
   describe "GET edit" do
     it "assigns the requested idea as @idea" do
-      idea = Idea.create! valid_attributes
+      idea = create(:idea, user: @user, topic: @topic)
       get :edit, {:id => idea.to_param}
       assigns(:idea).should eq(idea)
     end
@@ -71,19 +66,27 @@ describe IdeasController do
   describe "POST create" do
     describe "with valid params" do
       it "creates a new Idea" do
+        Idea.any_instance.stub(:valid?).and_return(true)
         expect {
-          post :create, {:idea => valid_attributes}
+          post :create, {:idea => attributes_for(:idea)}
         }.to change(Idea, :count).by(1)
       end
 
+      it "belongs to the current user" do
+        post :create, {idea: attributes_for(:idea)}
+        assigns(:idea).user.should eq(@user)
+      end
+
       it "assigns a newly created idea as @idea" do
-        post :create, {:idea => valid_attributes}
+        Idea.any_instance.stub(:valid?).and_return(true)
+        post :create, {:idea => attributes_for(:idea)}
         assigns(:idea).should be_a(Idea)
         assigns(:idea).should be_persisted
       end
 
       it "redirects to the created idea" do
-        post :create, {:idea => valid_attributes}
+        Idea.any_instance.stub(:valid?).and_return(true)
+        post :create, {:idea => attributes_for(:idea)}
         response.should redirect_to(Idea.last)
       end
     end
@@ -108,7 +111,7 @@ describe IdeasController do
   describe "PUT update" do
     describe "with valid params" do
       it "updates the requested idea" do
-        idea = Idea.create! valid_attributes
+        idea = create(:idea, user: @user, topic: @topic)
         # Assuming there are no other ideas in the database, this
         # specifies that the Idea created on the previous line
         # receives the :update_attributes message with whatever params are
@@ -118,21 +121,21 @@ describe IdeasController do
       end
 
       it "assigns the requested idea as @idea" do
-        idea = Idea.create! valid_attributes
-        put :update, {:id => idea.to_param, :idea => valid_attributes}
+        idea = create(:idea, user: @user, topic: @topic)
+        put :update, {:id => idea.to_param, :idea => attributes_for(:idea)}
         assigns(:idea).should eq(idea)
       end
 
       it "redirects to the idea" do
-        idea = Idea.create! valid_attributes
-        put :update, {:id => idea.to_param, :idea => valid_attributes}
+        idea = create(:idea, user: @user, topic: @topic)
+        put :update, {:id => idea.to_param, :idea => attributes_for(:idea)}
         response.should redirect_to(idea)
       end
     end
 
     describe "with invalid params" do
       it "assigns the idea as @idea" do
-        idea = Idea.create! valid_attributes
+        idea = create(:idea, user: @user, topic: @topic)
         # Trigger the behavior that occurs when invalid params are submitted
         Idea.any_instance.stub(:save).and_return(false)
         put :update, {:id => idea.to_param, :idea => {}}
@@ -140,7 +143,7 @@ describe IdeasController do
       end
 
       it "re-renders the 'edit' template" do
-        idea = Idea.create! valid_attributes
+        idea = create(:idea, user: @user, topic: @topic)
         # Trigger the behavior that occurs when invalid params are submitted
         Idea.any_instance.stub(:save).and_return(false)
         put :update, {:id => idea.to_param, :idea => {}}
@@ -151,14 +154,14 @@ describe IdeasController do
 
   describe "DELETE destroy" do
     it "destroys the requested idea" do
-      idea = Idea.create! valid_attributes
+      idea = create(:idea, user: @user, topic: @topic)
       expect {
         delete :destroy, {:id => idea.to_param}
       }.to change(Idea, :count).by(-1)
     end
 
     it "redirects to the ideas list" do
-      idea = Idea.create! valid_attributes
+      idea = create(:idea, user: @user, topic: @topic)
       delete :destroy, {:id => idea.to_param}
       response.should redirect_to(ideas_url)
     end

@@ -44,6 +44,9 @@ class TopicsController < ApplicationController
   def create
     @topic = Topic.new(params[:topic])
 
+    # Make sure the new topic belongs to the current user
+    @topic.owner = current_user
+
     respond_to do |format|
       if @topic.save
         format.html { redirect_to @topic, notice: 'Topic was successfully created.' }
