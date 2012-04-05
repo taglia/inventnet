@@ -1,22 +1,39 @@
-<h1>/Topic</h1>
+<h1><%= @topic.title -%></h1>
 
-<p>
-  <b>Title</b><br>
-  <%= @topic.title %>
-</p>
+</br>
 
-<p>
-  <b>Abstract</b><br>
-  <%= @topic.abstract %>
-</p>
+<%- if @topic.abstract != "" -%>
+    <p>
+      <b>Abstract</b><br>
+      <%= @topic.abstract %>
+    </p>
+<%- end -%>
 
 <p>
   <b>Owner</b><br>
-  <%= @topic.owner_id %>
+  <%- if current_user == @topic.owner -%>
+      Me
+  <%- else -%>
+      <%= @topic.owner.email %>
+  <%- end -%>
 </p>
 
+<%- if @topic.users.count > 0 -%>
+    <p>
+      <b>Contributors</b><br/>
+    <ul>
+      <%- @topic.users.each do |u| -%>
+          <li><%= u.email -%></li>
+      <%- end -%>
+    </ul>
+    </p>
+<%- end -%>
+
 <div class="form-actions">
-  <%= link_to 'Back', topics_path, :class => 'btn'  %>
-  <%= link_to 'Edit', edit_topic_path(@topic), :class => 'btn' %>
-  <%= link_to 'Delete', topic_path(@topic), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+  <%= link_to 'Back', topics_path, :class => 'btn' %>
+  <%- if current_user == @topic.owner -%>
+      <%= link_to 'Edit', edit_topic_path(@topic), :class => 'btn' %>
+      <%= link_to 'Contributors', topic_contributors_path(@topic), class: 'btn btn-inverse' %>
+      <%= link_to 'Delete', topic_path(@topic), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+  <%- end -%>
 </div>

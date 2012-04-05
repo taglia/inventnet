@@ -63,6 +63,14 @@ class TopicsController < ApplicationController
   def update
     @topic = Topic.find(params[:id])
 
+    # Check if the current user is the owner
+    if @topic.owner != current_user then
+      sign_out current_user
+      flash[:alert] = "You can't modify a topic which does not belong to you!"
+      redirect_to new_user_session_path
+      return
+    end
+
     respond_to do |format|
       if @topic.update_attributes(params[:topic])
         format.html { redirect_to @topic, notice: 'Topic was successfully updated.' }
@@ -78,6 +86,15 @@ class TopicsController < ApplicationController
   # DELETE /topics/1.json
   def destroy
     @topic = Topic.find(params[:id])
+
+    # Check if the current user is the owner
+    if @topic.owner != current_user then
+      sign_out current_user
+      flash[:alert] = "You can't delete a topic which does not belong to you!"
+      redirect_to new_user_session_path
+      return
+    end
+
     @topic.destroy
 
     respond_to do |format|

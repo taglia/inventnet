@@ -1,7 +1,11 @@
 Inventnet::Application.routes.draw do
-  resources :ideas
+  get "contributors/index"
 
-  resources :topics
+  resources :topics do
+    resources :contributors
+  end
+
+  resources :ideas
 
   devise_for :users
 

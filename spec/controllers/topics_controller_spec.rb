@@ -126,6 +126,20 @@ describe TopicsController do
         put :update, {:id => topic.id, :topic => {}}
         response.should render_template("edit")
       end
+
+      it "should not update other a topic belonging to another user" do
+        topic = create(:topic, owner: @user)
+        sign_out @user
+        other_user = create(:user)
+        other_user.confirm!
+        sign_in other_user
+
+        updated_topic = attributes_for(:topic, title: "A bad idea")
+
+        put :update, {id: topic.id, topic: updated_topic}
+
+        Topic.find(topic.id).title.should_not eq("A bad idea")
+      end
     end
   end
 
@@ -141,6 +155,18 @@ describe TopicsController do
       topic = create(:topic, owner: @user)
       delete :destroy, {:id => topic.id}
       response.should redirect_to(topics_url)
+    end
+
+    it "does not delete other people's topics" do
+      topic = create(:topic, owner: @user)
+      sign_out @user
+      other_user = create(:user)
+      other_user.confirm!
+      sign_in other_user
+
+      delete :destroy, {:id => topic.id}
+
+      expect { Topic.find(topic.id) }.should_not raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
