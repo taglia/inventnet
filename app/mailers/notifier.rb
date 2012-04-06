@@ -7,6 +7,9 @@ class Notifier < ActionMailer::Base
   #   en.notifier.multipart_alternative_rich.subject
   #
   def new_idea(user, topic, idea)
-    mail to: user, subject: "InventNet - New idea posted in a #{topic}"
+    @user = user
+    @topic = topic
+    @idea = idea
+    mail to: user, subject: "InventNet - New idea posted in '#{topic.title}'"
   end
 end

@@ -57,7 +57,7 @@ class IdeasController < ApplicationController
         # Send notifications
         recipients = @topic.users + [@topic.owner]
         recipients.each do |r|
-          Notifier.new_idea(r.email, @topic.title, @idea.title).deliver
+          Notifier.new_idea(r.email, @topic, @idea).deliver
         end
         format.html { redirect_to @topic, notice: 'Idea was successfully created.' }
       else
