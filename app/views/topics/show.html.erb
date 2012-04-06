@@ -4,7 +4,7 @@
   <%- if @topic.abstract != "" -%>
       <p>
         <b>Abstract</b><br>
-        <%= @topic.abstract %>
+        <%= simple_format @topic.abstract %>
       </p>
   <%- end -%>
 
@@ -48,10 +48,10 @@
             <td><%= idea.user.email -%></td>
             <td>
               <%- if idea.user == current_user || @topic.owner == current_user -%>
-                  <%= link_to 'Edit', edit_topic_idea_path(@topic, idea), :class => 'btn btn-mini' %>
-                  <%= link_to 'Delete', topic_idea_path(@topic, idea), :method => :delete, :confirm => 'Are you sure?', :class => 'btn btn-mini btn-danger' %>
+                  <%= link_to '<i class="icon-edit"></i> Edit'.html_safe, edit_topic_idea_path(@topic, idea), :class => 'btn btn-mini' %>
+                  <%= link_to '<i class="icon-trash"></i> Delete'.html_safe, topic_idea_path(@topic, idea), :method => :delete, :confirm => 'Are you sure?', :class => 'btn btn-mini btn-danger' %>
                  <%- else -%>
-              <i>Not your idea</i>
+              <i class="icon-ban-circle"></i> <i>Not your idea</i>
               <%- end -%>
             </td>
           </tr>
@@ -62,13 +62,13 @@
     <p>No ideas yet in this topic…</p>
 <%- end -%>
 
-<%= link_to 'New Idea!', new_topic_idea_path(@topic), :class => 'btn btn-primary' %>
+<%= link_to '<i class="icon-file"></i> New Idea!'.html_safe, new_topic_idea_path(@topic), :class => 'btn btn-primary' %>
 
 <div class="form-actions">
-  <%= link_to 'Back', topics_path, :class => 'btn' %>
+  <%= link_to '<i class="icon-arrow-left"></i> Back'.html_safe, topics_path, :class => 'btn' %>
   <%- if current_user == @topic.owner -%>
-      <%= link_to 'Edit', edit_topic_path(@topic), :class => 'btn' %>
-      <%= link_to 'Contributors', topic_contributors_path(@topic), class: 'btn btn-inverse' %>
-      <%= link_to 'Delete', topic_path(@topic), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+      <%= link_to '<i class="icon-edit"></i> Edit'.html_safe, edit_topic_path(@topic), :class => 'btn' %>
+      <%= link_to '<i class="icon-user"></i> Contributors'.html_safe, topic_contributors_path(@topic), class: 'btn btn-inverse' %>
+      <%= link_to '<i class="icon-trash"></i> Delete'.html_safe, topic_path(@topic), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
   <%- end -%>
 </div>

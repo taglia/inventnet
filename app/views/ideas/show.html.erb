@@ -7,7 +7,7 @@
 
 <p>
   <b>Content</b><br>
-  <%= @idea.content %>
+  <%= simple_format @idea.content %>
 </p>
 
 <p>
@@ -16,9 +16,9 @@
 </p>
 
 <div class="form-actions">
-  <%= link_to 'Back', topic_path(@topic), :class => 'btn' %>
+  <%= link_to '<i class="icon-arrow-left"></i> Back'.html_safe, topic_path(@topic), :class => 'btn' %>
   <%- if @idea.user == current_user || @topic.owner == current_user -%>
-      <%= link_to 'Edit', edit_topic_idea_path(@topic, @idea), :class => 'btn' %>
-      <%= link_to 'Delete', topic_idea_path(@topic, @idea), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+      <%= link_to '<i class="icon-edit"></i> Edit'.html_safe, edit_topic_idea_path(@topic, @idea), :class => 'btn' %>
+      <%= link_to '<i class="icon-trash"></i> Delete'.html_safe, topic_idea_path(@topic, @idea), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
   <%- end -%>
 </div>

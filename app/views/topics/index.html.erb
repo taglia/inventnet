@@ -15,8 +15,8 @@
             <td><%= topic.created_at.to_date.to_formatted_s(:long) %></td>
             <td>
               <%- if topic.owner == current_user -%>
-                  <%= link_to 'Edit', edit_topic_path(topic), :class => 'btn btn-mini' %>
-                  <%= link_to 'Delete', topic_path(topic), :method => :delete, :confirm => 'Are you sure?', :class => 'btn btn-mini btn-danger' %>
+                  <%= link_to '<i class="icon-edit"></i> Edit'.html_safe, edit_topic_path(topic), :class => 'btn btn-mini' %>
+                  <%= link_to '<i class="icon-trash"></i> Delete'.html_safe, topic_path(topic), :method => :delete, :confirm => 'Are you sure?', :class => 'btn btn-mini btn-danger' %>
               <%- else -%>
                   <i>You are not the owner</i>
               <%- end -%>
@@ -28,4 +28,4 @@
   </tbody>
 </table>
 
-<%= link_to 'New', new_topic_path, :class => 'btn btn-primary' %>
+<%= link_to '<i class="icon-file"></i> New'.html_safe, new_topic_path, :class => 'btn btn-primary' %>
