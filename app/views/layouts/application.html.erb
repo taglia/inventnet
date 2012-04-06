@@ -24,6 +24,10 @@
 
       <div class="nav-collapse">
         <ul class="nav">
+          <%- if user_signed_in? -%>
+              <%= nav_link "Discussion Topics", topics_path -%>
+              <li class="divider-vertical"></li>
+          <%- end -%>
           <%= render 'devise/menu/registration_items' %>
           <%= render 'devise/menu/login_items' %>
         </ul>
@@ -45,6 +49,7 @@
     <div class="span3">
       <%= image_tag "inventnet_sidebar.jpg" -%>
       <h2>InventNet</h2>
+
       <p>A collaboration platform for creative minds. Beware, this service is not released, use it at your own risk!</p>
     </div>
   </div>

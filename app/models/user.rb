@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
-
-  has_many :topics, through: :roles
+  has_many :roles, dependent: :destroy
+  has_many :topics, through: :roles, dependent: :destroy
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :lockable, :timeoutable and :omniauthable

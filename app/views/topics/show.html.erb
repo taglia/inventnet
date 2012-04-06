@@ -1,33 +1,68 @@
-<h1><%= @topic.title -%></h1>
+<div class="page-header" xmlns="http://www.w3.org/1999/html"><h1><%= @topic.title -%></h1></div>
 
-</br>
-
-<%- if @topic.abstract != "" -%>
-    <p>
-      <b>Abstract</b><br>
-      <%= @topic.abstract %>
-    </p>
-<%- end -%>
-
-<p>
-  <b>Owner</b><br>
-  <%- if current_user == @topic.owner -%>
-      Me
-  <%- else -%>
-      <%= @topic.owner.email %>
+<div class="alert alert-info">
+  <%- if @topic.abstract != "" -%>
+      <p>
+        <b>Abstract</b><br>
+        <%= @topic.abstract %>
+      </p>
   <%- end -%>
-</p>
 
-<%- if @topic.users.count > 0 -%>
-    <p>
-      <b>Contributors</b><br/>
-    <ul>
-      <%- @topic.users.each do |u| -%>
-          <li><%= u.email -%></li>
-      <%- end -%>
-    </ul>
-    </p>
+  <p>
+    <b>Owner</b><br>
+    <%- if current_user == @topic.owner -%>
+        <i class="icon-user"></i> Me
+    <%- else -%>
+        <i class="icon-user"></i> <%= @topic.owner.email %>
+    <%- end -%>
+  </p>
+
+  <%- if @topic.users.count > 0 -%>
+      <p>
+        <b>Contributors</b><br/>
+        <%- @topic.users.each do |u| -%>
+            <i class="icon-user"></i> <%= u.email -%><br/>
+        <%- end -%>
+      </p>
+  <%- end -%>
+</div>
+
+
+<div class="page-header"><h2>Ideas</h2></div>
+<% @ideas = Idea.where(topic_id: @topic) %>
+<%- if @ideas.count > 0 -%>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Title</th>
+        <th>Created on</th>
+        <th>By</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @ideas.each do |idea| %>
+          <tr>
+            <td><i class="icon-file"></i> <%= link_to idea.title, topic_idea_path(@topic, idea) %></td>
+            <td><%= idea.created_at.to_date.to_formatted_s(:long) %></td>
+            <td><%= idea.user.email -%></td>
+            <td>
+              <%- if idea.user == current_user || @topic.owner == current_user -%>
+                  <%= link_to 'Edit', edit_topic_idea_path(@topic, idea), :class => 'btn btn-mini' %>
+                  <%= link_to 'Delete', topic_idea_path(@topic, idea), :method => :delete, :confirm => 'Are you sure?', :class => 'btn btn-mini btn-danger' %>
+                 <%- else -%>
+              <i>Not your idea</i>
+              <%- end -%>
+            </td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+<%- else -%>
+    <p>No ideas yet in this topic…</p>
 <%- end -%>
+
+<%= link_to 'New Idea!', new_topic_idea_path(@topic), :class => 'btn btn-primary' %>
 
 <div class="form-actions">
   <%= link_to 'Back', topics_path, :class => 'btn' %>

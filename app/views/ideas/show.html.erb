@@ -1,4 +1,4 @@
-<h1>/Idea</h1>
+<div class="page-header"><h1>Idea</h1></div>
 
 <p>
   <b>Title</b><br>
@@ -12,11 +12,13 @@
 
 <p>
   <b>Topic</b><br>
-  <%= @idea.topic_id %>
+  <%= @topic.title %>
 </p>
 
 <div class="form-actions">
-  <%= link_to 'Back', ideas_path, :class => 'btn' %>
-  <%= link_to 'Edit', edit_idea_path(@idea), :class => 'btn' %>
-  <%= link_to 'Delete', idea_path(@idea), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+  <%= link_to 'Back', topic_path(@topic), :class => 'btn' %>
+  <%- if @idea.user == current_user || @topic.owner == current_user -%>
+      <%= link_to 'Edit', edit_topic_idea_path(@topic, @idea), :class => 'btn' %>
+      <%= link_to 'Delete', topic_idea_path(@topic, @idea), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+  <%- end -%>
 </div>

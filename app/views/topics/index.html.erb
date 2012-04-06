@@ -1,25 +1,30 @@
 <h1>Topics</h1>
 <table class="table table-striped">
   <thead>
-    <tr>
-      <th>ID</th>
-      <th>Title</th>
-      <th>Created at</th>
-      <th>Actions</th>
-    </tr>
+  <tr>
+    <th>Title</th>
+    <th>Created on</th>
+    <th>Actions</th>
+  </tr>
   </thead>
   <tbody>
-    <% @topics.each do |topic| %>
-      <tr>
-        <td><%= topic.id %></td>
-        <td><%= link_to topic.title, topic_path(topic) %></td>
-        <td><%= topic.created_at %></td>
-        <td>
-          <%= link_to 'Edit', edit_topic_path(topic), :class => 'btn btn-mini' %>
-          <%= link_to 'Destroy', topic_path(topic), :method => :delete, :confirm => 'Are you sure?', :class => 'btn btn-mini btn-danger' %>
-        </td>
-      </tr>
-    <% end %>
+  <% @topics.each do |topic| %>
+      <%- if (topic.users + [topic.owner]).include? current_user -%>
+          <tr>
+            <td><i class="icon-inbox"></i> <%= link_to topic.title, topic_path(topic) %></td>
+            <td><%= topic.created_at.to_date.to_formatted_s(:long) %></td>
+            <td>
+              <%- if topic.owner == current_user -%>
+                  <%= link_to 'Edit', edit_topic_path(topic), :class => 'btn btn-mini' %>
+                  <%= link_to 'Delete', topic_path(topic), :method => :delete, :confirm => 'Are you sure?', :class => 'btn btn-mini btn-danger' %>
+              <%- else -%>
+                  <i>You are not the owner</i>
+              <%- end -%>
+
+            </td>
+          </tr>
+      <%- end -%>
+  <% end %>
   </tbody>
 </table>
 

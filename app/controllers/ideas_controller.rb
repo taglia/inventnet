@@ -15,6 +15,7 @@ class IdeasController < ApplicationController
   # GET /ideas/1
   # GET /ideas/1.json
   def show
+    @topic = Topic.find(params[:topic_id])
     @idea = Idea.find(params[:id])
 
     respond_to do |format|
@@ -26,6 +27,7 @@ class IdeasController < ApplicationController
   # GET /ideas/new
   # GET /ideas/new.json
   def new
+    @topic = Topic.find(params[:topic_id])
     @idea = Idea.new
 
     respond_to do |format|
@@ -36,53 +38,49 @@ class IdeasController < ApplicationController
 
   # GET /ideas/1/edit
   def edit
+    @topic = Topic.find(params[:topic_id])
     @idea = Idea.find(params[:id])
   end
 
   # POST /ideas
   # POST /ideas.json
   def create
+    @topic = Topic.find(params[:topic_id])
     @idea = Idea.new(params[:idea])
 
     # Make sure the new idea belongs to the current user
     @idea.user = current_user
+    @idea.topic = @topic
 
     respond_to do |format|
       if @idea.save
-        format.html { redirect_to @idea, notice: 'Idea was successfully created.' }
-        format.json { render json: @idea, status: :created, location: @idea }
+        format.html { redirect_to @topic, notice: 'Idea was successfully created.' }
       else
         format.html { render action: "new" }
-        format.json { render json: @idea.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PUT /ideas/1
-  # PUT /ideas/1.json
   def update
+    @topic = Topic.find(params[:topic_id])
     @idea = Idea.find(params[:id])
 
     respond_to do |format|
       if @idea.update_attributes(params[:idea])
-        format.html { redirect_to @idea, notice: 'Idea was successfully updated.' }
-        format.json { head :no_content }
+        format.html { redirect_to @topic, notice: 'Idea was successfully updated.' }
       else
         format.html { render action: "edit" }
-        format.json { render json: @idea.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /ideas/1
-  # DELETE /ideas/1.json
   def destroy
+    @topic = Topic.find(params[:topic_id])
     @idea = Idea.find(params[:id])
     @idea.destroy
 
     respond_to do |format|
-      format.html { redirect_to ideas_url }
-      format.json { head :no_content }
+      format.html { redirect_to @topic, notice: 'Idea was successfully deleted.' }
     end
   end
 end

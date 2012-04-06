@@ -2,4 +2,7 @@
 <p>This service allow you to create a group and privately share and work on ideas.
   This is the very first draft of service, bear with me till more features will be added.
   And please, do not hesitate to let me know what could be added to make the service better and more useful for you!</p>
-<p class="alert alert-info">Go ahead and <%= link_to "register", new_user_registration_path -%>, once inside you will be able to start discussing new topics with your group.</p>
+<%- if !user_signed_in? -%>
+    <p class="alert alert-info">Go ahead and <%= link_to "register", new_user_registration_path -%>, once inside you
+      will be able to start discussing new topics with your group.</p>
+<%- end -%>

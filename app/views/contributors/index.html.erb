@@ -1,0 +1,26 @@
+<h1>Contributors for <%= @topic.title -%></h1>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Email</th>
+    <th></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @contributors.each do |contributor| %>
+      <tr>
+        <td><%= contributor.email -%></td>
+        <%- if @topic.owner == current_user -%>
+            <td><%= link_to 'Remove', topic_contributor_path(@topic, contributor), confirm: 'Are you sure?', method: :delete, class: 'btn btn-mini btn-danger' %></td>
+        <%- end -%>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br/>
+
+<%= link_to 'New Contributor', new_topic_contributor_path(@topic), class: "btn btn-primary" %>
+<%= link_to 'Back', topic_path(@topic), class: "btn" %>
