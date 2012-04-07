@@ -25,10 +25,12 @@ module ApplicationHelper
       end
 
     end
-    style = Nokogiri::XML::Node.new("style", doc)
-    style.content=Pygments.css('.highlight')
-    doc.at_css("pre").children.first.add_previous_sibling(style)
+    pre = doc.at_css("pre")
+    if pre then
+      style = Nokogiri::XML::Node.new("style", doc)
+      style.content=Pygments.css('.highlight')
+      pre.children.first.add_previous_sibling(style)
+    end
     doc.to_html
   end
 end
-
