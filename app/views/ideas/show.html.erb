@@ -1,6 +1,11 @@
 <div class="page-header"><h1>Idea</h1></div>
 
 <p>
+  <b>Topic</b><br>
+  <%= @topic.title %>
+</p>
+
+<p>
   <b>Title</b><br>
   <%= @idea.title %>
 </p>
@@ -8,11 +13,6 @@
 <p>
   <b>Content</b><br>
   <%= simple_format @idea.content %>
-</p>
-
-<p>
-  <b>Topic</b><br>
-  <%= @topic.title %>
 </p>
 
 <div class="form-actions">

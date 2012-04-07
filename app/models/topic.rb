@@ -1,6 +1,6 @@
 class Topic < ActiveRecord::Base
   belongs_to :owner, class_name: "User"
-  has_many :ideas, dependent: :nullify
+  has_many :ideas, dependent: :destroy
   has_many :roles, dependent: :destroy
   has_many :users, through: :roles
 
