@@ -11,6 +11,12 @@ gem 'devise'
 gem 'rack-ssl-enforcer'
 gem 'omniauth-facebook'
 
+gem 'redcarpet', '1.17.2'
+gem 'gollum'
+
+gem 'albino'
+gem 'nokogiri'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

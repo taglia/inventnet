@@ -10,10 +10,11 @@
   <%= @idea.title %>
 </p>
 
-<p>
-  <b>Content</b><br>
-  <%= simple_format @idea.content %>
-</p>
+<hr/>
+<b>Content</b>
+<div class="well well-small">
+  <%= markdown @idea.content %>
+</div>
 
 <div class="form-actions">
   <%= link_to '<i class="icon-arrow-left"></i> Back'.html_safe, topic_path(@topic), :class => 'btn' %>
