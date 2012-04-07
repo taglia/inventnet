@@ -15,10 +15,20 @@ module ApplicationHelper
   end
 
   def syntax_highlighter(html)
-    doc = Nokogiri::HTML(html)
-    doc.search("//pre[@lang]").each do |pre|
-      pre.replace Albino.colorize(pre.text.rstrip, pre[:lang])
+    doc = Nokogiri::HTML::DocumentFragment.parse(html)
+    doc.css("pre[@lang]").each do |pre|
+      options = {:encoding => 'utf-8'}
+      begin
+        pre.replace Pygments.highlight(pre.text.rstrip, lexer: pre[:lang], options: options)
+      rescue
+        pre.replace Pygments.highlight(pre.text.rstrip, options: options)
+      end
+
     end
-    doc.to_s
+    style = Nokogiri::XML::Node.new("style", doc)
+    style.content=Pygments.css('.highlight')
+    doc.at_css("pre").children.first.add_previous_sibling(style)
+    doc.to_html
   end
 end
+

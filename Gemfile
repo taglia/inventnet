@@ -14,7 +14,7 @@ gem 'omniauth-facebook'
 gem 'redcarpet', '1.17.2'
 gem 'gollum'
 
-gem 'albino'
+gem 'pygments.rb'
 gem 'nokogiri'
 
 # Gems used only for assets and not required
