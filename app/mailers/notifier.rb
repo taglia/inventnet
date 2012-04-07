@@ -1,5 +1,5 @@
 class Notifier < ActionMailer::Base
-  default from: "InventNet@cesare.me"
+  default from: "DoNotReply@inventnet.me"
 
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:

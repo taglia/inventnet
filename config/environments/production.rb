@@ -70,7 +70,7 @@ Inventnet::Application.configure do
   config.action_mailer.raise_delivery_errors = true
 
   # Required by devise confirmable
-  config.action_mailer.default_url_options = {:host => 'cesare.me'}
+  config.action_mailer.default_url_options = {:host => 'inventnet.me'}
 
   # Enforce use of SSL
   config.middleware.use Rack::SslEnforcer
