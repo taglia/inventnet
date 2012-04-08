@@ -7,3 +7,6 @@ stdout_path "#{root}/log/unicorn.log"
 listen "/tmp/unicorn.inventnet.sock"
 worker_processes 2
 timeout 30
+
+# Required by New Relic agent
+preload_app true
