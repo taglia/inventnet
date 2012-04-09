@@ -18,8 +18,13 @@ class TopicsController < ApplicationController
     @topic = Topic.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @topic }
+      if @topic.user_authorized?(current_user)
+        format.html # show.html.erb
+        format.json { render json: @topic }
+      else
+        flash[:alert] = "You are not authorized to see this topic!"
+        format.html { redirect_to root_path }
+      end
     end
   end
 
@@ -37,6 +42,10 @@ class TopicsController < ApplicationController
   # GET /topics/1/edit
   def edit
     @topic = Topic.find(params[:id])
+    if !@topic.user_authorized?(current_user)
+      flash[:alert] = "You are not authorized to edit this topic!"
+      redirect_to root_path
+    end
   end
 
   # POST /topics

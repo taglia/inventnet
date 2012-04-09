@@ -19,8 +19,13 @@ class IdeasController < ApplicationController
     @idea = Idea.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @idea }
+      if @topic.user_authorized?(current_user)
+        format.html # show.html.erb
+        format.json { render json: @idea }
+      else
+        flash[:alert] = "You are not authorized to see this topic!"
+        format.html { redirect_to root_path }
+      end
     end
   end
 
@@ -40,6 +45,16 @@ class IdeasController < ApplicationController
   def edit
     @topic = Topic.find(params[:topic_id])
     @idea = Idea.find(params[:id])
+    
+    if !@topic.user_authorized?(current_user)
+      flash[:alert] = "You are not authorized to edit ideas in this topic!"
+      redirect_to root_path
+    end
+    
+    if @topic.owner != current_user && @idea.user != current_user
+      flash[:alert] = "You are not authorized to edit this idea!"
+      redirect_to root_path
+    end
   end
 
   # POST /ideas
