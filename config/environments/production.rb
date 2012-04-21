@@ -73,6 +73,6 @@ Inventnet::Application.configure do
   config.action_mailer.default_url_options = {:host => 'inventnet.me'}
 
   # Enforce use of SSL
-  config.middleware.use Rack::SslEnforcer
+  config.middleware.use Rack::SslEnforcer, except_hosts: 'pr.inventnet.me'
 
 end
