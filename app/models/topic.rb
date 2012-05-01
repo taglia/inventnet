@@ -13,7 +13,7 @@ class Topic < ActiveRecord::Base
 
     result = self.where(owner_id: user.id)
     roles.each do |r|
-      result << self.where(id: r.topic_id)
+      result += self.where(id: r.topic_id)
     end
     
     result
