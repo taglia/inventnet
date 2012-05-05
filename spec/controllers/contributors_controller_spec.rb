@@ -19,58 +19,31 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe ContributorsController do
-
-  # This should return the minimal set of attributes required to create a valid
-  # Contributor. As you add validations to Contributor, be sure to
-  # update the return value of this method accordingly.
-  def valid_attributes
-    {}
-  end
-  
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # ContributorsController. Be sure to keep this updated too.
-  def valid_session
-    {}
-  end
+  login_user
 
   describe "GET index" do
-    it "assigns all contributors as @contributors" do
-      contributor = Contributor.create! valid_attributes
-      get :index, {}, valid_session
-      assigns(:contributors).should eq([contributor])
-    end
-  end
-
-  describe "GET show" do
-    it "assigns the requested contributor as @contributor" do
-      contributor = Contributor.create! valid_attributes
-      get :show, {:id => contributor.to_param}, valid_session
-      assigns(:contributor).should eq(contributor)
+    it "assigns all contributors for a given topic as @contributors" do
+      role = FactoryGirl.create(:role)
+      get :index, topic_id: role.topic.id
+      assigns(:contributors).should eq([role.user])
     end
   end
 
   describe "GET new" do
     it "assigns a new contributor as @contributor" do
-      get :new, {}, valid_session
-      assigns(:contributor).should be_a_new(Contributor)
-    end
-  end
-
-  describe "GET edit" do
-    it "assigns the requested contributor as @contributor" do
-      contributor = Contributor.create! valid_attributes
-      get :edit, {:id => contributor.to_param}, valid_session
-      assigns(:contributor).should eq(contributor)
+      get :new
+      assigns(:contributor).should be_a_new(User)
     end
   end
 
   describe "POST create" do
     describe "with valid params" do
-      it "creates a new Contributor" do
+      it "creates a new Contributor for the given topic" do
+        topic = FactoryGirl.create(:topic)
+        contributor = FactoryGirl.create(:user)
         expect {
-          post :create, {:contributor => valid_attributes}, valid_session
-        }.to change(Contributor, :count).by(1)
+          post :create, { topic_id: topic.id, user: { email: contributor.email } }
+        }.to change(Role, :count).by(1)
       end
 
       it "assigns a newly created contributor as @contributor" do
@@ -98,50 +71,6 @@ describe ContributorsController do
         Contributor.any_instance.stub(:save).and_return(false)
         post :create, {:contributor => {}}, valid_session
         response.should render_template("new")
-      end
-    end
-  end
-
-  describe "PUT update" do
-    describe "with valid params" do
-      it "updates the requested contributor" do
-        contributor = Contributor.create! valid_attributes
-        # Assuming there are no other contributors in the database, this
-        # specifies that the Contributor created on the previous line
-        # receives the :update_attributes message with whatever params are
-        # submitted in the request.
-        Contributor.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, {:id => contributor.to_param, :contributor => {'these' => 'params'}}, valid_session
-      end
-
-      it "assigns the requested contributor as @contributor" do
-        contributor = Contributor.create! valid_attributes
-        put :update, {:id => contributor.to_param, :contributor => valid_attributes}, valid_session
-        assigns(:contributor).should eq(contributor)
-      end
-
-      it "redirects to the contributor" do
-        contributor = Contributor.create! valid_attributes
-        put :update, {:id => contributor.to_param, :contributor => valid_attributes}, valid_session
-        response.should redirect_to(contributor)
-      end
-    end
-
-    describe "with invalid params" do
-      it "assigns the contributor as @contributor" do
-        contributor = Contributor.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Contributor.any_instance.stub(:save).and_return(false)
-        put :update, {:id => contributor.to_param, :contributor => {}}, valid_session
-        assigns(:contributor).should eq(contributor)
-      end
-
-      it "re-renders the 'edit' template" do
-        contributor = Contributor.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Contributor.any_instance.stub(:save).and_return(false)
-        put :update, {:id => contributor.to_param, :contributor => {}}, valid_session
-        response.should render_template("edit")
       end
     end
   end
