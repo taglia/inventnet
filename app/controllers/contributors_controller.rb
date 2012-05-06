@@ -24,21 +24,20 @@ class ContributorsController < ApplicationController
     @contributor = params[:user][:email]
     @topic = Topic.find params[:topic_id]
 
-    respond_to do |format|
-      if User.where("email='#{@contributor}'").count == 1
-        user = User.where("email='#{@contributor}'").first
-        if @topic.users.include? user then
-          format.html { redirect_to topic_contributors_path, alert: "User #{@contributor} is already a contributor!" }
-        elsif @topic.owner == user
-          format.html { redirect_to topic_contributors_path, alert: "User #{@contributor} is the owner of this topic!" }
-        else
-          @topic.users << user
-          format.html { redirect_to topic_contributors_path, notice: "Contributor #{@contributor} was successfully added." }
-        end
+    if User.where("email='#{@contributor}'").count == 1
+      user = User.where("email='#{@contributor}'").first
+
+      if @topic.users.include? user then
+        redirect_to topic_contributors_path, alert: "User #{@contributor} is already a contributor!"
+      elsif @topic.owner == user
+        redirect_to topic_contributors_path, alert: "User #{@contributor} is the owner of this topic!"
       else
-        flash[:alert] = "There are no users with email #{@contributor}. Ask them to register!"
-        format.html { render action: "new" }
+        @topic.users << user
+        redirect_to topic_contributors_path, notice: "Contributor #{@contributor} was successfully added."
       end
+    else
+      flash[:alert] = "There are no users with email #{@contributor}. Ask them to register!"
+      render action: "new"
     end
   end
 

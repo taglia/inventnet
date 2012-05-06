@@ -62,6 +62,20 @@ describe ContributorsController do
         post :create, topic_id: topic.id, user: { email: "non-existent@wrong.com" }
         response.should render_template("new")
       end
+
+      it "should not add the owner as a contributor" do
+        topic = FactoryGirl.create(:topic)
+        expect {
+          post :create, topic_id: topic.id, user: { email: topic.owner.email }
+        }.not_to change(Role, :count)
+      end
+
+      it "should not add the same contributor more than once" do
+        role = FactoryGirl.create(:role)
+        expect {
+          post :create, topic_id: role.topic.id, user: { email: role.user.email }
+        }.not_to change(Role, :count)
+      end
     end
   end
 
