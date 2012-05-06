@@ -83,44 +83,43 @@ describe IdeasController do
 
   describe "POST create" do
     describe "with valid params" do
+      before(:each) do
+        @idea_attr = FactoryGirl.attributes_for(:idea)
+        @topic = FactoryGirl.create(:topic)
+
+        Notifier.stub_chain :new_idea, :deliver
+      end
+
       it "creates a new Idea" do
-        Idea.any_instance.stub(:valid?).and_return(true)
         expect {
-          post :create, {:idea => attributes_for(:idea)}
+          post :create, idea: @idea_attr, topic_id: @topic.id
         }.to change(Idea, :count).by(1)
       end
 
       it "belongs to the current user" do
-        post :create, {idea: attributes_for(:idea)}
-        assigns(:idea).user.should eq(@user)
+        user = FactoryGirl.create(:user)
+        controller.stub current_user: user
+        post :create, idea: @idea_attr, topic_id: @topic.id
+        assigns(:idea).user.should eq(user)
       end
 
       it "assigns a newly created idea as @idea" do
-        Idea.any_instance.stub(:valid?).and_return(true)
-        post :create, {:idea => attributes_for(:idea)}
+        post :create, :idea => @idea_attr, topic_id: @topic.id
         assigns(:idea).should be_a(Idea)
         assigns(:idea).should be_persisted
       end
 
       it "redirects to the created idea" do
-        Idea.any_instance.stub(:valid?).and_return(true)
-        post :create, {:idea => attributes_for(:idea)}
-        response.should redirect_to(Idea.last)
+        post :create, :idea => @idea_attr, topic_id: @topic.id
+        response.should redirect_to(topic_path(@topic))
       end
     end
 
     describe "with invalid params" do
-      it "assigns a newly created but unsaved idea as @idea" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Idea.any_instance.stub(:save).and_return(false)
-        post :create, {:idea => {}}
-        assigns(:idea).should be_a_new(Idea)
-      end
-
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Idea.any_instance.stub(:save).and_return(false)
-        post :create, {:idea => {}}
+        post :create, :idea => {}, topic_id: FactoryGirl.create(:topic).id
         response.should render_template("new")
       end
     end

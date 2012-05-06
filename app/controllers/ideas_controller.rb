@@ -55,8 +55,6 @@ class IdeasController < ApplicationController
     end
   end
 
-  # POST /ideas
-  # POST /ideas.json
   def create
     @topic = Topic.find(params[:topic_id])
     @idea = Idea.new(params[:idea])
@@ -65,17 +63,15 @@ class IdeasController < ApplicationController
     @idea.user = current_user
     @idea.topic = @topic
 
-    respond_to do |format|
-      if @idea.save then
-        # Send notifications
-        recipients = @topic.users + [@topic.owner]
-        recipients.each do |r|
-          Notifier.new_idea(r.email, @topic, @idea).deliver
-        end
-        format.html { redirect_to @topic, notice: 'Idea was successfully created.' }
-      else
-        format.html { render action: "new" }
+    if @idea.save then
+      # Send notifications
+      recipients = @topic.users + [@topic.owner]
+      recipients.each do |r|
+        Notifier.new_idea(r.email, @topic, @idea).deliver
       end
+      redirect_to @topic, notice: 'Idea was successfully created.'
+    else
+      render action: "new"
     end
   end
 
