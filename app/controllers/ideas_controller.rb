@@ -1,19 +1,6 @@
 class IdeasController < ApplicationController
   before_filter :authenticate_user!
 
-  # GET /ideas
-  # GET /ideas.json
-  def index
-    @ideas = Idea.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @ideas }
-    end
-  end
-
-  # GET /ideas/1
-  # GET /ideas/1.json
   def show
     @topic = Topic.find(params[:topic_id])
     @idea = Idea.find(params[:id])

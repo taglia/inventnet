@@ -127,43 +127,31 @@ describe IdeasController do
 
   describe "PUT update" do
     describe "with valid params" do
+      before(:each) do
+        @idea = FactoryGirl.create(:idea)
+      end
       it "updates the requested idea" do
-        idea = create(:idea, user: @user, topic: @topic)
-        # Assuming there are no other ideas in the database, this
-        # specifies that the Idea created on the previous line
-        # receives the :update_attributes message with whatever params are
-        # submitted in the request.
         Idea.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, {:id => idea.to_param, :idea => {'these' => 'params'}}
+        put :update, {topic_id: @idea.topic.id, id: @idea.to_param, :idea => {'these' => 'params'}}
       end
 
       it "assigns the requested idea as @idea" do
-        idea = create(:idea, user: @user, topic: @topic)
-        put :update, {:id => idea.to_param, :idea => attributes_for(:idea)}
-        assigns(:idea).should eq(idea)
+        put :update, {topic_id: @idea.topic.id, id: @idea.to_param, :idea => attributes_for(:idea)}
+        assigns(:idea).should eq(@idea)
       end
 
       it "redirects to the idea" do
-        idea = create(:idea, user: @user, topic: @topic)
-        put :update, {:id => idea.to_param, :idea => attributes_for(:idea)}
-        response.should redirect_to(idea)
+        put :update, {topic_id: @idea.topic.id, id: @idea.to_param, :idea => attributes_for(:idea)}
+        response.should redirect_to(@idea.topic)
       end
     end
 
     describe "with invalid params" do
-      it "assigns the idea as @idea" do
-        idea = create(:idea, user: @user, topic: @topic)
-        # Trigger the behavior that occurs when invalid params are submitted
-        Idea.any_instance.stub(:save).and_return(false)
-        put :update, {:id => idea.to_param, :idea => {}}
-        assigns(:idea).should eq(idea)
-      end
-
       it "re-renders the 'edit' template" do
-        idea = create(:idea, user: @user, topic: @topic)
+        idea = FactoryGirl.create(:idea)
         # Trigger the behavior that occurs when invalid params are submitted
         Idea.any_instance.stub(:save).and_return(false)
-        put :update, {:id => idea.to_param, :idea => {}}
+        put :update, {topic_id: idea.topic.id, id: idea.to_param, idea: {}}
         response.should render_template("edit")
       end
     end
@@ -171,16 +159,16 @@ describe IdeasController do
 
   describe "DELETE destroy" do
     it "destroys the requested idea" do
-      idea = create(:idea, user: @user, topic: @topic)
+      idea = FactoryGirl.create(:idea)
       expect {
-        delete :destroy, {:id => idea.to_param}
+        delete :destroy, {topic_id: idea.topic.id, :id => idea.to_param}
       }.to change(Idea, :count).by(-1)
     end
 
     it "redirects to the ideas list" do
-      idea = create(:idea, user: @user, topic: @topic)
-      delete :destroy, {:id => idea.to_param}
-      response.should redirect_to(ideas_url)
+      idea = FactoryGirl.create(:idea)
+      delete :destroy, {topic_id: idea.topic.id, :id => idea.to_param}
+      response.should redirect_to(idea.topic)
     end
   end
 
