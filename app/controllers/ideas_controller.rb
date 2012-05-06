@@ -29,8 +29,6 @@ class IdeasController < ApplicationController
     end
   end
 
-  # GET /ideas/new
-  # GET /ideas/new.json
   def new
     @topic = Topic.find(params[:topic_id])
     @idea = Idea.new
@@ -41,16 +39,16 @@ class IdeasController < ApplicationController
     end
   end
 
-  # GET /ideas/1/edit
   def edit
     @topic = Topic.find(params[:topic_id])
     @idea = Idea.find(params[:id])
-    
+
     if !@topic.user_authorized?(current_user)
       flash[:alert] = "You are not authorized to edit ideas in this topic!"
       redirect_to root_path
+      return
     end
-    
+
     if @topic.owner != current_user && @idea.user != current_user
       flash[:alert] = "You are not authorized to edit this idea!"
       redirect_to root_path

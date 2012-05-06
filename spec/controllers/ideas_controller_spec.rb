@@ -20,46 +20,64 @@ require 'spec_helper'
 
 describe IdeasController do
 
-  before(:each) do
-    @user = FactoryGirl.create(:user)
-    @user.confirm!
-    sign_in @user
-
-    @topic = create(:topic, owner: @user)
-  end
-
-  after(:each) do
-    sign_out @user
-  end
+  login_user
 
   describe "GET index" do
-    it "assigns all ideas as @ideas" do
-      idea = create(:idea, user: @user, topic: @topic)
-      get :index, {}
+    it "assigns all ideas for the current topic as @ideas" do
+      idea = FactoryGirl.create(:idea)
+      get :index, topic_id: idea.topic.id
       assigns(:ideas).should eq([idea])
     end
   end
 
   describe "GET show" do
     it "assigns the requested idea as @idea" do
-      idea = create(:idea, user: @user, topic: @topic)
-      get :show, {:id => idea.to_param}
+      idea = FactoryGirl.create(:idea)
+      get :show, topic_id: idea.topic.id, :id => idea.id
       assigns(:idea).should eq(idea)
     end
   end
 
   describe "GET new" do
     it "assigns a new idea as @idea" do
-      get :new, {}
+      topic = FactoryGirl.create(:topic)
+      get :new, topic_id: topic.id
       assigns(:idea).should be_a_new(Idea)
     end
   end
 
   describe "GET edit" do
+    before(:each) do
+      @idea = FactoryGirl.create(:idea)
+    end
+
     it "assigns the requested idea as @idea" do
-      idea = create(:idea, user: @user, topic: @topic)
-      get :edit, {:id => idea.to_param}
-      assigns(:idea).should eq(idea)
+      get :edit, :id => @idea.id, topic_id: @idea.topic.id
+      assigns(:idea).should eq(@idea)
+    end
+
+    it "redirects to root_path if not authorized" do
+      get :edit, :id => @idea.id, topic_id: @idea.topic.id
+      response.should redirect_to(root_path)
+    end
+
+    it "should succeed if topic owner" do
+      controller.stub :current_user => @idea.topic.owner
+      get :edit, :id => @idea.id, topic_id: @idea.topic.id
+      response.should be_success
+    end
+
+    it "should succeed if topic contributor and idea owner" do
+      controller.stub :current_user => @idea.user
+      @idea.topic.users << @idea.user
+      get :edit, :id => @idea.id, topic_id: @idea.topic.id
+      response.should be_success
+    end
+
+    it "redirects if topic contributor but not idea owner" do
+      controller.stub :current_user => @idea.user
+      get :edit, :id => @idea.id, topic_id: @idea.topic.id
+      response.should redirect_to(root_path)
     end
   end
 

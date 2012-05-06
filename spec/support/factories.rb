@@ -16,6 +16,7 @@ FactoryGirl.define do
     title "Buona idea"
     content "La migliore idea mai venuta!"
     user
+    topic
   end
 
   factory :role do

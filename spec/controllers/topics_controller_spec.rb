@@ -87,26 +87,24 @@ describe TopicsController do
 
   describe "PUT update" do
     describe "with valid params" do
+      before(:each) do
+        @topic = FactoryGirl.create(:topic)
+        controller.stub current_user: @topic.owner
+      end
+
       it "updates the requested topic" do
-        topic = create(:topic, owner: @user)
-        # Assuming there are no other topics in the database, this
-        # specifies that the Topic created on the previous line
-        # receives the :update_attributes message with whatever params are
-        # submitted in the request.
         Topic.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, {:id => topic.id, :topic => {'these' => 'params'}}
+        put :update, {:id => @topic.id, :topic => {'these' => 'params'}}
       end
 
       it "assigns the requested topic as @topic" do
-        topic = create(:topic, owner: @user)
-        put :update, {:id => topic.id, :topic => attributes_for(:topic)}
-        assigns(:topic).should eq(topic)
+        put :update, {:id => @topic.id, :topic => attributes_for(:topic)}
+        assigns(:topic).should eq(@topic)
       end
 
       it "redirects to the topic" do
-        topic = create(:topic, owner: @user)
-        put :update, {:id => topic.id, :topic => attributes_for(:topic)}
-        response.should redirect_to(topic)
+        put :update, {:id => @topic.id, :topic => attributes_for(:topic)}
+        response.should redirect_to(@topic)
       end
     end
 

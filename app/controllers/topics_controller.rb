@@ -67,8 +67,6 @@ class TopicsController < ApplicationController
     end
   end
 
-  # PUT /topics/1
-  # PUT /topics/1.json
   def update
     @topic = Topic.find(params[:id])
 
@@ -91,8 +89,6 @@ class TopicsController < ApplicationController
     end
   end
 
-  # DELETE /topics/1
-  # DELETE /topics/1.json
   def destroy
     @topic = Topic.find(params[:id])
 
