@@ -38,56 +38,41 @@ describe ContributorsController do
 
   describe "POST create" do
     describe "with valid params" do
+
+      before(:each) do
+        @topic = FactoryGirl.create(:topic)
+        @contributor = FactoryGirl.create(:user)
+      end
+
       it "creates a new Contributor for the given topic" do
-        topic = FactoryGirl.create(:topic)
-        contributor = FactoryGirl.create(:user)
         expect {
-          post :create, { topic_id: topic.id, user: { email: contributor.email } }
+          post :create, { topic_id: @topic.id, user: { email: @contributor.email } }
         }.to change(Role, :count).by(1)
       end
 
       it "assigns a newly created contributor as @contributor" do
-        post :create, {:contributor => valid_attributes}, valid_session
-        assigns(:contributor).should be_a(Contributor)
-        assigns(:contributor).should be_persisted
-      end
-
-      it "redirects to the created contributor" do
-        post :create, {:contributor => valid_attributes}, valid_session
-        response.should redirect_to(Contributor.last)
+        post :create, { topic_id: @topic.id, user: { email: @contributor.email } }
+        assigns(:contributor).should be_a(String) # contributor is just the user's email here
       end
     end
 
     describe "with invalid params" do
-      it "assigns a newly created but unsaved contributor as @contributor" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Contributor.any_instance.stub(:save).and_return(false)
-        post :create, {:contributor => {}}, valid_session
-        assigns(:contributor).should be_a_new(Contributor)
-      end
-
       it "re-renders the 'new' template" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Contributor.any_instance.stub(:save).and_return(false)
-        post :create, {:contributor => {}}, valid_session
+        topic = FactoryGirl.create(:topic)
+        post :create, topic_id: topic.id, user: { email: "non-existent@wrong.com" }
         response.should render_template("new")
       end
     end
   end
 
   describe "DELETE destroy" do
-    it "destroys the requested contributor" do
-      contributor = Contributor.create! valid_attributes
+    it "destroys the requested association (role) between user and topic" do
+      role = FactoryGirl.create(:role)
       expect {
-        delete :destroy, {:id => contributor.to_param}, valid_session
-      }.to change(Contributor, :count).by(-1)
+        delete :destroy, topic_id: role.topic.id, id: role.user.id
+      }.to change(Role, :count).by(-1)
     end
 
-    it "redirects to the contributors list" do
-      contributor = Contributor.create! valid_attributes
-      delete :destroy, {:id => contributor.to_param}, valid_session
-      response.should redirect_to(contributors_url)
-    end
   end
 
 end
