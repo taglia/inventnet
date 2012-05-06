@@ -22,14 +22,6 @@ describe IdeasController do
 
   login_user
 
-  describe "GET index" do
-    it "assigns all ideas for the current topic as @ideas" do
-      idea = FactoryGirl.create(:idea)
-      get :index, topic_id: idea.topic.id
-      assigns(:ideas).should eq([idea])
-    end
-  end
-
   describe "GET show" do
     it "assigns the requested idea as @idea" do
       idea = FactoryGirl.create(:idea)
