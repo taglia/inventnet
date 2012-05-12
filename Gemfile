@@ -44,7 +44,10 @@ group :test do
   gem 'capybara'
   gem 'shoulda-matchers'
   gem 'database_cleaner'
-  gem 'autotest'
+  gem "ZenTest"
+  gem "autotest-rails-pure"
+  gem "autotest-growl"
+  gem "autotest-fsevent"
 end
 
 # To use ActiveModel has_secure_password
