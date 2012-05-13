@@ -48,6 +48,7 @@ group :test do
   gem "autotest-rails-pure"
   gem "autotest-growl"
   gem "autotest-fsevent"
+  gem "cucumber-rails"
 end
 
 # To use ActiveModel has_secure_password
