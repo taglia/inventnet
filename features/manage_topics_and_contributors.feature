@@ -11,3 +11,13 @@ Feature: Add contributors to a project
       |non_contrib@titi.com  |maomao321    |maomao321            |
     And a topic named "The Best Topic!" owned by "owner@titi.com"
 
+  Scenario: A user should be able to see a project if they are a contributor
+    Given "contrib@titi.com" is a contributor for "The Best Topic!"
+    And "contrib@titi.com" is logged in using password "maomao321"
+    When I visit the topic page for "The Best Topic!"
+    Then I am taken to the topic page for "The Best Topic!"
+
+  Scenario: A user should not be able to see a project if they are not contributor (nor owner)
+    Given "non_contrib@titi.com" is logged in using password "maomao321"
+    When I visit the topic page for "The Best Topic!"
+    Then I am taken to the root page
