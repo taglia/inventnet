@@ -11,7 +11,6 @@ When /^I click on "([^"]*)"$/ do |clickable|
 end
 
 When /^I fill "([^"]*)" with "([^"]*)"$/ do |field_name, content|
-  debugger
     fill_in field_name, with: content
 end
 
