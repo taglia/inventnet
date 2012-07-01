@@ -8,8 +8,8 @@ gem 'rails', '3.2.3'
 gem 'pg'
 gem 'simple_form'
 gem 'devise'
-gem 'rack-ssl-enforcer'
 gem 'omniauth-facebook'
+gem 'thin'
 
 gem 'redcarpet', '1.17.2'
 gem 'gollum'
@@ -17,18 +17,12 @@ gem 'gollum'
 gem 'pygments.rb'
 gem 'nokogiri'
 
-gem 'newrelic_rpm'
-
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
-  gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
-
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer', :platform => :ruby
-
+  gem 'twitter-bootstrap-rails'
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -50,18 +44,3 @@ group :test do
   gem "autotest-fsevent"
   gem "cucumber-rails"
 end
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
-
-# Use unicorn as the app server
-gem 'unicorn'
-
-# Deploy with Capistrano
-gem 'capistrano'
-
-# To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'

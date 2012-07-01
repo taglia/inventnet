@@ -71,8 +71,4 @@ Inventnet::Application.configure do
 
   # Required by devise confirmable
   config.action_mailer.default_url_options = {:host => 'inventnet.me'}
-
-  # Enforce use of SSL
-  config.middleware.use Rack::SslEnforcer
-
 end
